@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APK Galaxy - Download Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #ff4d7d;
+            --secondary: #6a11cb;
+            --accent: #00c9ff;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+            display: inline-block;
+        }
+
+        @keyframes logoGlow {
+            0% {
+                filter: drop-shadow(0 0 5px rgba(255, 77, 125, 0.5));
+                transform: scale(1);
+            }
+            50% {
+                filter: drop-shadow(0 0 20px rgba(106, 17, 203, 0.7));
+                transform: scale(1.05);
+            }
+            100% {
+                filter: drop-shadow(0 0 10px rgba(0, 201, 255, 0.6));
+                transform: scale(1);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a5b1c2;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: cardAppear 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: iconFloat 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .app-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: inherit;
+            filter: blur(10px);
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+            66% {
+                transform: translateY(5px) rotate(-5deg);
+            }
+        }
+
+        .app-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .app-description {
+            color: #a5b1c2;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .app-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .app-details span {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .app-details span:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(106, 17, 203, 0.6);
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn.disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .download-btn.disabled:hover::before {
+            left: -100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: modalAppear 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #a5b1c2;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 77, 125, 0.1), rgba(106, 17, 203, 0.1), transparent);
+            animation: modalBg 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes modalBg {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .timer {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1.5rem 0;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(255, 77, 125, 0.5);
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 1s linear;
+            border-radius: 5px;
+        }
+
+        .modal-message {
+            margin: 1rem 0;
+            color: #a5b1c2;
+        }
+
+        .active-download-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .active-download-btn:hover {
+            background: linear-gradient(45deg, #45a049, #4CAF50);
+            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50vh) rotate(120deg) scale(1.2);
+            }
+            66% {
+                transform: translate(-20px, -80vh) rotate(240deg) scale(0.8);
+            }
+            100% {
+                transform: translate(0, -100vh) rotate(360deg) scale(1);
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem 0;
+            color: #a5b1c2;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Particle animation for background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent), transparent);
+            animation: particleFloat 20s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) scale(0);
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="floating-elements" id="floatingElements"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="logo">APK Galaxy</h1>
+            <p class="subtitle">Discover and download premium Android applications. All APK files are verified and safe to use.</p>
+        </header>
+        
+        <div class="cards-container" id="cardsContainer">
+            <!-- Cards will be generated by JavaScript -->
+        </div>
+    </div>
+    
+    <div class="modal" id="downloadModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <h2>Download Starting</h2>
+            <p class="modal-message">Your download will begin in <span class="timer" id="timer">10</span> seconds</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p class="modal-message">Please wait while we prepare your download...</p>
+            <a class="download-btn disabled" id="modalDownloadBtn" target="_blank">Download Now</a>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2026 APK Galaxy. All rights reserved. | Safe & Verified Downloads</p>
+    </footer>
+
+    <script>
+        // Sample APK data with download links and images
+        const apkData = [
+            {
+                id: 1,
+                name: "Flying Modi App",
+                description: "Funny politician game featuring popular characters.",
+                version: "v2.5.1",
+                size: "12 MB",
+                icon: "https://cdn.solo.to/user/a/690786d7ee48e4_07318961.jpg",
+                downloadLink: "https://drive.google.com/uc?export=download&id=10iUwv-8WbQ3mvvourm1H0Yr4ebfX5lNT",
+                color: "linear-gradient(45deg, #ff4d7d, #ff6b6b)"
+            },
+            {
+                id: 2,
+                name: "Music Player X",
+                description: "High-quality music player with equalizer, playlists, and lyrics support.",
+                version: "v1.8.3",
+                size: "32 MB",
+                icon: "https://cdn-icons-png.flaticon.com/512/727/727241.png",
+                downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_2",
+                color: "linear-gradient(45deg, #6a11cb, #2575fc)"
+            },
+            {
+                id: 3,
+                name: "Fitness Tracker",
+                description: "Track your workouts, calories, and progress with this comprehensive fitness app.",
+                version: "v3.2.0",
+                size: "68 MB",
+                icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png",
+                downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_3",
+                color: "linear-gradient(45deg, #00c9ff, #92fe9d)"
+            },
+            {
+                id: 4,
+                name: "Finance Manager",
+                description: "Manage your expenses, budgets, and investments in one secure application.",
+                version: "v4.1.7",
+                size: "52 MB",
+                icon: "https://cdn-icons-png.flaticon.com/512/3135/3135694.png",
+                downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_4",
+                color: "linear-gradient(45deg, #f46b45, #eea849)"
+            },
+            {
+                id: 5,
+                name: "Language Tutor",
+                description: "Learn new languages with interactive lessons, quizzes, and pronunciation guides.",
+                version: "v2.9.4",
+                size: "78 MB",
+                icon: "https://cdn-icons-png.flaticon.com/512/3898/3898082.png",
+                downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_5",
+                color: "linear-gradient(45deg, #834d9b, #d04ed6)"
+            },
+            {
+                id: 6,
+                name: "Weather Pro",
+                description: "Accurate weather forecasts, radar maps, and severe weather alerts.",
+                version: "v1.5.2",
+                size: "28 MB",
+                icon: "https://cdn-icons-png.flaticon.com/512/1146/1146869.png",
+                downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_6",
+                color: "linear-gradient(45deg, #4da0ff, #6a11cb)"
+            }
+        ];
+
+        // Generate particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.width = `${5 + Math.random() * 10}px`;
+            particle.style.height = particle.style.width;
+            particle.style.animationDuration = `${15 + Math.random() * 20}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particlesContainer.appendChild(particle);
+        }
+
+        // Generate floating elements
+        const floatingElements = document.getElementById('floatingElements');
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.style.left = `${Math.random() * 100}%`;
+            element.style.top = `${Math.random() * 100}%`;
+            element.style.animationDuration = `${15 + Math.random() * 20}s`;
+            element.style.width = `${20 + Math.random() * 50}px`;
+            element.style.height = element.style.width;
+            
+            const colors = [
+                'rgba(255, 77, 125, 0.3)',
+                'rgba(106, 17, 203, 0.3)',
+                'rgba(0, 201, 255, 0.3)',
+                'rgba(255, 215, 0, 0.3)'
+            ];
+            element.style.background = colors[Math.floor(Math.random() * colors.length)];
+            floatingElements.appendChild(element);
+        }
+
+        // Generate cards
+        const cardsContainer = document.getElementById('cardsContainer');
+        
+        apkData.forEach(apk => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-content">
+                    <div class="app-icon" style="background: ${apk.color}">
+                        <img src="${apk.icon}" alt="${apk.name}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/888/888879.png'">
+                    </div>
+                    <h3 class="app-name">${apk.name}</h3>
+                    <p class="app-description">${apk.description}</p>
+                    <div class="app-details">
+                        <span>${apk.version}</span>
+                        <span>${apk.size}</span>
+                    </div>
+                    <button class="download-btn" data-id="${apk.id}">Download APK</button>
+                </div>
+            `;
+            cardsContainer.appendChild(card);
+        });
+
+        // Modal elements
+        const modal = document.getElementById('downloadModal');
+        const timerElement = document.getElementById('timer');
+        const progressElement = document.getElementById('progress');
+        const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+        const closeModalBtn = document.getElementById('closeModal');
+        
+        let countdown;
+        let currentApk;
+
+        // Function to close modal and reset timer
+        function closeModal() {
+            modal.style.display = 'none';
+            modalDownloadBtn.classList.add('disabled');
+            modalDownloadBtn.classList.remove('active-download-btn');
+            modalDownloadBtn.textContent = 'Download Now';
+            modalDownloadBtn.href = "#";
+            clearInterval(countdown);
+        }
+
+        // Add event listeners to download buttons
+        document.querySelectorAll('.download-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.classList.contains('disabled')) return;
+                
+                const apkId = this.getAttribute('data-id');
+                currentApk = apkData.find(apk => apk.id == apkId);
+                
+                modal.style.display = 'flex';
+                
+                let timeLeft = 10;
+                timerElement.textContent = timeLeft;
+                progressElement.style.width = '0%';
+                modalDownloadBtn.classList.add('disabled');
+                modalDownloadBtn.href = "#";
+                modalDownloadBtn.textContent = 'Download Now';
+                
+                countdown = setInterval(() => {
+                    timeLeft--;
+                    timerElement.textContent = timeLeft;
+                    progressElement.style.width = `${(10 - timeLeft) * 10}%`;
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        modalDownloadBtn.classList.remove('disabled');
+                        modalDownloadBtn.classList.add('active-download-btn');
+                        modalDownloadBtn.textContent = 'Download Now';
+                        // Use the direct download link format for Google Drive
+                        modalDownloadBtn.href = currentApk.downloadLink;
+                        modalDownloadBtn.setAttribute('download', `${currentApk.name}.apk`);
+                    }
+                }, 1000);
+            });
+        });
+
+        // Close modal when clicking the X button
+        closeModalBtn.addEventListener('click', closeModal);
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

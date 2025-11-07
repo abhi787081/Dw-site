@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APK Galaxy - Download Center</title>
+    <title>Galaxy Store - Download Center</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -19,73 +19,250 @@
             --accent: #00c9ff;
             --dark: #1a1a2e;
             --light: #f8f9fa;
+            --bg-color: #1a1a2e;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --text-color: #f8f9fa;
+            --text-secondary: #a5b1c2;
+            --header-bg: rgba(26, 26, 46, 0.9);
+            --search-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f0f2f5;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #333;
+            --text-secondary: #666;
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --search-bg: rgba(0, 0, 0, 0.05);
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: var(--light);
+            background: linear-gradient(135deg, var(--bg-color) 0%, #16213e 50%, #0f3460 100%);
+            color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
+            transition: all 0.3s ease;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 0 1rem;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
+        /* Fixed Header */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-container {
             position: relative;
-            padding: 2rem 0;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .logo {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary));
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff4d7d, #6a11cb, #00c9ff);
+            opacity: 0.7;
+            mix-blend-mode: overlay;
+            animation: logoColorShift 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoColorShift {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        .site-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            animation: logoGlow 3s ease-in-out infinite alternate;
-            display: inline-block;
+            position: relative;
         }
 
-        @keyframes logoGlow {
-            0% {
-                filter: drop-shadow(0 0 5px rgba(255, 77, 125, 0.5));
-                transform: scale(1);
+        .galaxy-animation {
+            position: absolute;
+            top: -10px;
+            right: -25px;
+            font-size: 1.2rem;
+            animation: galaxyFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes galaxyFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
             }
             50% {
-                filter: drop-shadow(0 0 20px rgba(106, 17, 203, 0.7));
-                transform: scale(1.05);
+                transform: translateY(-5px) rotate(10deg);
             }
-            100% {
-                filter: drop-shadow(0 0 10px rgba(0, 201, 255, 0.6));
+        }
+
+        .search-section {
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 0 1rem;
+            position: relative;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            animation: searchPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes searchPulse {
+            0%, 100% {
                 transform: scale(1);
+                box-shadow: 0 0 0 rgba(0, 201, 255, 0);
             }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 0 15px rgba(0, 201, 255, 0.3);
+            }
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 3rem;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: var(--search-bg);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--search-bg);
+            box-shadow: 0 0 15px rgba(0, 201, 255, 0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .search-input:focus + .search-icon {
+            color: var(--accent);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .theme-toggle {
+            background: var(--search-bg);
+            border: none;
+            color: var(--text-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(30deg);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding-bottom: 3rem;
         }
 
         .subtitle {
-            font-size: 1.2rem;
-            color: #a5b1c2;
+            font-size: 1rem;
+            color: var(--text-secondary);
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0 auto 1.5rem;
+            text-align: center;
             animation: fadeIn 2s ease-out;
+            padding: 0 1rem;
         }
 
         .cards-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.2rem;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 1rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
             transition: all 0.4s ease;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -93,6 +270,9 @@
             overflow: hidden;
             animation: cardAppear 0.8s ease-out;
             animation-fill-mode: both;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .card:nth-child(1) { animation-delay: 0.1s; }
@@ -114,9 +294,9 @@
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            background: var(--card-bg);
         }
 
         .card::before {
@@ -134,21 +314,54 @@
             left: 100%;
         }
 
+        /* Green blur light animation for card background */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(76, 175, 80, 0.1) 0%, transparent 70%);
+            animation: greenPulse 4s ease-in-out infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        @keyframes greenPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.6;
+            }
+        }
+
         .card-content {
             position: relative;
             z-index: 1;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .app-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 0.8rem;
+            font-size: 1.3rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
             animation: iconFloat 3s ease-in-out infinite;
             position: relative;
             overflow: hidden;
@@ -158,7 +371,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 20px;
+            border-radius: 14px;
         }
 
         .app-icon::after {
@@ -166,9 +379,9 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 20px;
+            border-radius: 14px;
             background: inherit;
-            filter: blur(10px);
+            filter: blur(6px);
             opacity: 0.7;
             z-index: -1;
         }
@@ -178,16 +391,16 @@
                 transform: translateY(0) rotate(0deg);
             }
             33% {
-                transform: translateY(-10px) rotate(5deg);
+                transform: translateY(-5px) rotate(3deg);
             }
             66% {
-                transform: translateY(5px) rotate(-5deg);
+                transform: translateY(2px) rotate(-3deg);
             }
         }
 
         .app-name {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
             text-align: center;
             background: linear-gradient(45deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
@@ -196,24 +409,27 @@
         }
 
         .app-description {
-            color: #a5b1c2;
-            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.3;
+            font-size: 0.85rem;
+            flex-grow: 1;
         }
 
         .app-details {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .app-details span {
             background: rgba(255, 255, 255, 0.1);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
             transition: all 0.3s ease;
+            color: var(--text-secondary);
         }
 
         .app-details span:hover {
@@ -221,15 +437,20 @@
             transform: scale(1.05);
         }
 
+        .card-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
         .download-btn {
             display: block;
             width: 100%;
-            padding: 1rem;
+            padding: 0.7rem;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -237,12 +458,12 @@
             overflow: hidden;
             text-align: center;
             text-decoration: none;
-            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+            box-shadow: 0 3px 10px rgba(106, 17, 203, 0.3);
         }
 
         .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 20px rgba(106, 17, 203, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(106, 17, 203, 0.5);
             background: linear-gradient(45deg, var(--secondary), var(--primary));
         }
 
@@ -276,6 +497,146 @@
             left: -100%;
         }
 
+        .view-btn {
+            display: block;
+            padding: 0.7rem 1rem;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+            white-space: nowrap;
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(76, 175, 80, 0.5);
+            background: linear-gradient(45deg, #45a049, #4CAF50);
+        }
+
+        .view-btn:active {
+            transform: translateY(0);
+        }
+
+        .view-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .view-btn:hover::before {
+            left: 100%;
+        }
+
+        /* View Modal */
+        .view-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .view-modal-content {
+            background: linear-gradient(135deg, var(--bg-color) 0%, #16213e 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: modalAppear 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .view-modal-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(76, 175, 80, 0.1), rgba(106, 17, 203, 0.1), transparent);
+            animation: modalBg 10s linear infinite;
+            z-index: -1;
+        }
+
+        .close-view-btn {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-view-btn:hover {
+            color: var(--primary);
+        }
+
+        .app-images-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 1rem 0;
+            scroll-behavior: smooth;
+            margin: 1rem 0;
+        }
+
+        .app-images-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .app-images-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .app-images-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        .app-image {
+            min-width: 200px;
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .app-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -291,13 +652,13 @@
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 2rem;
-            border-radius: 20px;
+            background: linear-gradient(135deg, var(--bg-color) 0%, #16213e 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
             text-align: center;
-            max-width: 400px;
+            max-width: 350px;
             width: 90%;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             animation: modalAppear 0.5s ease-out;
             position: relative;
@@ -306,12 +667,12 @@
 
         .close-btn {
             position: absolute;
-            top: 15px;
-            right: 20px;
+            top: 12px;
+            right: 16px;
             background: none;
             border: none;
-            color: #a5b1c2;
-            font-size: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 1.3rem;
             cursor: pointer;
             transition: color 0.3s ease;
             z-index: 10;
@@ -354,11 +715,11 @@
         }
 
         .timer {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: bold;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
             color: var(--primary);
-            text-shadow: 0 0 10px rgba(255, 77, 125, 0.5);
+            text-shadow: 0 0 8px rgba(255, 77, 125, 0.5);
             animation: pulse 1s infinite alternate;
         }
 
@@ -367,15 +728,15 @@
                 transform: scale(1);
             }
             to {
-                transform: scale(1.1);
+                transform: scale(1.05);
             }
         }
 
         .progress-bar {
-            height: 10px;
+            height: 8px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin: 1.5rem 0;
+            border-radius: 4px;
+            margin: 1rem 0;
             overflow: hidden;
         }
 
@@ -384,22 +745,23 @@
             background: linear-gradient(45deg, var(--primary), var(--accent));
             width: 0%;
             transition: width 1s linear;
-            border-radius: 5px;
+            border-radius: 4px;
         }
 
         .modal-message {
-            margin: 1rem 0;
-            color: #a5b1c2;
+            margin: 0.8rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         .active-download-btn {
             background: linear-gradient(45deg, #4CAF50, #45a049);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
         }
 
         .active-download-btn:hover {
             background: linear-gradient(45deg, #45a049, #4CAF50);
-            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.6);
+            box-shadow: 0 5px 12px rgba(76, 175, 80, 0.5);
         }
 
         .floating-elements {
@@ -436,11 +798,50 @@
 
         footer {
             text-align: center;
-            margin-top: 4rem;
-            padding: 2rem 0;
-            color: #a5b1c2;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             animation: fadeIn 2s ease-out;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            z-index: 99;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.75rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-text {
+            font-size: 0.7rem;
         }
 
         @keyframes fadeIn {
@@ -481,12 +882,128 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .cards-container {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            .header-content {
+                padding: 0 0.5rem;
             }
             
-            .logo {
-                font-size: 2.5rem;
+            .search-section {
+                margin: 0 0.5rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 0.8rem;
+            }
+            
+            .site-name {
+                font-size: 1.3rem;
+            }
+            
+            .logo-container {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .search-input {
+                padding: 0.6rem 1rem 0.6rem 2.5rem;
+                font-size: 0.8rem;
+            }
+            
+            .search-icon {
+                left: 0.8rem;
+            }
+            
+            .search-btn {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.7rem;
+            }
+            
+            .main-content {
+                margin-top: 90px;
+                padding-bottom: 4rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 1.2rem;
+            }
+            
+            .card {
+                padding: 0.8rem;
+                border-radius: 12px;
+            }
+            
+            .app-icon {
+                width: 45px;
+                height: 45px;
+                margin-bottom: 0.6rem;
+                border-radius: 12px;
+            }
+            
+            .app-name {
+                font-size: 0.95rem;
+            }
+            
+            .app-description {
+                font-size: 0.75rem;
+            }
+            
+            .card-buttons {
+                flex-direction: column;
+            }
+            
+            .view-btn, .download-btn {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+            
+            .app-image {
+                min-width: 150px;
+                height: 220px;
+            }
+            
+            .footer-links {
+                gap: 0.8rem;
+            }
+            
+            .footer-links a {
+                font-size: 0.7rem;
+            }
+            
+            .footer-text {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            .logo-section {
+                order: 1;
+            }
+            
+            .search-section {
+                order: 3;
+                margin: 0.5rem 0 0;
+                max-width: 100%;
+            }
+            
+            .theme-toggle {
+                order: 2;
+            }
+            
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            
+            .main-content {
+                margin-top: 120px;
+            }
+            
+            footer {
+                padding: 0.4rem 0;
             }
         }
     </style>
@@ -495,17 +1012,43 @@
     <div class="particles" id="particles"></div>
     <div class="floating-elements" id="floatingElements"></div>
     
-    <div class="container">
-        <header>
-            <h1 class="logo">APK Galaxy</h1>
-            <p class="subtitle">Discover and download premium Android applications. All APK files are verified and safe to use.</p>
-        </header>
-        
-        <div class="cards-container" id="cardsContainer">
-            <!-- Cards will be generated by JavaScript -->
+    <!-- Fixed Header -->
+    <div class="header-container">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-container">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2906/2906275.png" alt="Galaxy Store Logo">
+                    <div class="logo-glow"></div>
+                </div>
+                <h1 class="site-name">Galaxy Store<span class="galaxy-animation">🌌</span></h1>
+            </div>
+            
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search for apps...">
+                    <i class="fas fa-search search-icon"></i>
+                    <button class="search-btn">Search</button>
+                </div>
+            </div>
+            
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
     </div>
     
+    <!-- Main Content (Scrollable) -->
+    <div class="container">
+        <div class="main-content">
+            <p class="subtitle">Discover and download premium Android applications. All APK files are verified and safe to use.</p>
+            
+            <div class="cards-container" id="cardsContainer">
+                <!-- Cards will be generated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Download Modal -->
     <div class="modal" id="downloadModal">
         <div class="modal-content">
             <button class="close-btn" id="closeModal">&times;</button>
@@ -519,22 +1062,79 @@
         </div>
     </div>
     
+    <!-- View Modal -->
+    <div class="view-modal" id="viewModal">
+        <div class="view-modal-content">
+            <button class="close-view-btn" id="closeViewModal">&times;</button>
+            <h2 id="viewModalTitle">App Preview</h2>
+            <div class="app-images-container" id="appImagesContainer">
+                <!-- Images will be added by JavaScript -->
+            </div>
+            <p class="modal-message">Scroll horizontally to view more screenshots</p>
+        </div>
+    </div>
+    
+    <!-- Fixed Footer -->
     <footer>
-        <p>&copy; 2026 APK Galaxy. All rights reserved. | Safe & Verified Downloads</p>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Privacy</a>
+                <a href="#">terms</a>
+                <a href="#">contact</a>
+            </div>
+            <p class="footer-text">&copy; 2026 Galaxy Store</p>
+        </div>
     </footer>
 
     <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Check for saved theme or prefer color scheme
+        const savedTheme = localStorage.getItem('theme') || 
+                          (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        
+        // Apply the saved theme
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        
+        function updateThemeIcon(theme) {
+            if (theme === 'light') {
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+
         // Sample APK data with download links and images
         const apkData = [
             {
                 id: 1,
-                name: "Flying Modi App",
+                name: "Flying Modi",
                 description: "Funny politician game featuring popular characters.",
                 version: "v2.5.1",
                 size: "12 MB",
                 icon: "https://cdn.solo.to/user/a/690786d7ee48e4_07318961.jpg",
                 downloadLink: "https://drive.google.com/uc?export=download&id=10iUwv-8WbQ3mvvourm1H0Yr4ebfX5lNT",
-                color: "linear-gradient(45deg, #ff4d7d, #ff6b6b)"
+                color: "linear-gradient(45deg, #ff4d7d, #ff6b6b)",
+                screenshots: [
+                    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Z2FtZSUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdhbWUlMjBhcHB8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGdhbWUlMjBhcHB8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+                ]
             },
             {
                 id: 2,
@@ -544,7 +1144,12 @@
                 size: "32 MB",
                 icon: "https://cdn-icons-png.flaticon.com/512/727/727241.png",
                 downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_2",
-                color: "linear-gradient(45deg, #6a11cb, #2575fc)"
+                color: "linear-gradient(45deg, #6a11cb, #2575fc)",
+                screenshots: [
+                    "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bXVzaWMlMjBhcHB8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bXVzaWMlMjBhcHB8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG11c2ljJTIwYXBwfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60"
+                ]
             },
             {
                 id: 3,
@@ -554,7 +1159,12 @@
                 size: "68 MB",
                 icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png",
                 downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_3",
-                color: "linear-gradient(45deg, #00c9ff, #92fe9d)"
+                color: "linear-gradient(45deg, #00c9ff, #92fe9d)",
+                screenshots: [
+                    "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zml0bmVzcyUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Zml0bmVzcyUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Zml0bmVzcyUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                ]
             },
             {
                 id: 4,
@@ -564,7 +1174,12 @@
                 size: "52 MB",
                 icon: "https://cdn-icons-png.flaticon.com/512/3135/3135694.png",
                 downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_4",
-                color: "linear-gradient(45deg, #f46b45, #eea849)"
+                color: "linear-gradient(45deg, #f46b45, #eea849)",
+                screenshots: [
+                    "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmluYW5jZSUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZmluYW5jZSUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZpbmFuY2UlMjBhcHB8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+                ]
             },
             {
                 id: 5,
@@ -574,7 +1189,12 @@
                 size: "78 MB",
                 icon: "https://cdn-icons-png.flaticon.com/512/3898/3898082.png",
                 downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_5",
-                color: "linear-gradient(45deg, #834d9b, #d04ed6)"
+                color: "linear-gradient(45deg, #834d9b, #d04ed6)",
+                screenshots: [
+                    "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bGFuZ3VhZ2UlMjBhcHB8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bGFuZ3VhZ2UlMjBhcHB8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGxhbmd1YWdlJTIwYXBwfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60"
+                ]
             },
             {
                 id: 6,
@@ -584,7 +1204,12 @@
                 size: "28 MB",
                 icon: "https://cdn-icons-png.flaticon.com/512/1146/1146869.png",
                 downloadLink: "https://drive.google.com/uc?export=download&id=YOUR_GOOGLE_DRIVE_FILE_ID_6",
-                color: "linear-gradient(45deg, #4da0ff, #6a11cb)"
+                color: "linear-gradient(45deg, #4da0ff, #6a11cb)",
+                screenshots: [
+                    "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2VhdGhlciUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8d2VhdGhlciUyMGFwcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                    "https://images.unsplash.com/photo-1433863448220-78aaa064ff47?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHdlYXRoZXIlMjBhcHB8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+                ]
             }
         ];
 
@@ -625,25 +1250,119 @@
         // Generate cards
         const cardsContainer = document.getElementById('cardsContainer');
         
-        apkData.forEach(apk => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <div class="card-content">
-                    <div class="app-icon" style="background: ${apk.color}">
-                        <img src="${apk.icon}" alt="${apk.name}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/888/888879.png'">
+        function generateCards(data) {
+            cardsContainer.innerHTML = '';
+            
+            data.forEach(apk => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-content">
+                        <div class="app-icon" style="background: ${apk.color}">
+                            <img src="${apk.icon}" alt="${apk.name}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/888/888879.png'">
+                        </div>
+                        <h3 class="app-name">${apk.name}</h3>
+                        <p class="app-description">${apk.description}</p>
+                        <div class="app-details">
+                            <span>${apk.version}</span>
+                            <span>${apk.size}</span>
+                        </div>
+                        <div class="card-buttons">
+                            <button class="view-btn" data-id="${apk.id}">View</button>
+                            <button class="download-btn" data-id="${apk.id}">Download APK</button>
+                        </div>
                     </div>
-                    <h3 class="app-name">${apk.name}</h3>
-                    <p class="app-description">${apk.description}</p>
-                    <div class="app-details">
-                        <span>${apk.version}</span>
-                        <span>${apk.size}</span>
-                    </div>
-                    <button class="download-btn" data-id="${apk.id}">Download APK</button>
-                </div>
-            `;
-            cardsContainer.appendChild(card);
-        });
+                `;
+                cardsContainer.appendChild(card);
+            });
+            
+            // Re-attach event listeners to new buttons
+            document.querySelectorAll('.download-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('disabled')) return;
+                    
+                    const apkId = this.getAttribute('data-id');
+                    currentApk = apkData.find(apk => apk.id == apkId);
+                    
+                    modal.style.display = 'flex';
+                    
+                    let timeLeft = 10;
+                    timerElement.textContent = timeLeft;
+                    progressElement.style.width = '0%';
+                    modalDownloadBtn.classList.add('disabled');
+                    modalDownloadBtn.href = "#";
+                    modalDownloadBtn.textContent = 'Download Now';
+                    
+                    countdown = setInterval(() => {
+                        timeLeft--;
+                        timerElement.textContent = timeLeft;
+                        progressElement.style.width = `${(10 - timeLeft) * 10}%`;
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(countdown);
+                            modalDownloadBtn.classList.remove('disabled');
+                            modalDownloadBtn.classList.add('active-download-btn');
+                            modalDownloadBtn.textContent = 'Download Now';
+                            // Use the direct download link format for Google Drive
+                            modalDownloadBtn.href = currentApk.downloadLink;
+                            modalDownloadBtn.setAttribute('download', `${currentApk.name}.apk`);
+                        }
+                    }, 1000);
+                });
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const apkId = this.getAttribute('data-id');
+                    const apk = apkData.find(apk => apk.id == apkId);
+                    
+                    // Set modal title
+                    document.getElementById('viewModalTitle').textContent = `${apk.name} - Screenshots`;
+                    
+                    // Clear previous images
+                    const imagesContainer = document.getElementById('appImagesContainer');
+                    imagesContainer.innerHTML = '';
+                    
+                    // Add new images
+                    apk.screenshots.forEach(screenshot => {
+                        const imageDiv = document.createElement('div');
+                        imageDiv.className = 'app-image';
+                        imageDiv.innerHTML = `<img src="${screenshot}" alt="${apk.name} screenshot">`;
+                        imagesContainer.appendChild(imageDiv);
+                    });
+                    
+                    // Show modal
+                    viewModal.style.display = 'flex';
+                });
+            });
+        }
+
+        // Initial card generation
+        generateCards(apkData);
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                generateCards(apkData);
+                return;
+            }
+            
+            const filteredData = apkData.filter(apk => 
+                apk.name.toLowerCase().includes(searchTerm) || 
+                apk.description.toLowerCase().includes(searchTerm)
+            );
+            
+            generateCards(filteredData);
+        }
+        
+        searchInput.addEventListener('input', performSearch);
+        searchBtn.addEventListener('click', performSearch);
 
         // Modal elements
         const modal = document.getElementById('downloadModal');
@@ -651,6 +1370,10 @@
         const progressElement = document.getElementById('progress');
         const modalDownloadBtn = document.getElementById('modalDownloadBtn');
         const closeModalBtn = document.getElementById('closeModal');
+        
+        // View modal elements
+        const viewModal = document.getElementById('viewModal');
+        const closeViewModalBtn = document.getElementById('closeViewModal');
         
         let countdown;
         let currentApk;
@@ -665,48 +1388,19 @@
             clearInterval(countdown);
         }
 
-        // Add event listeners to download buttons
-        document.querySelectorAll('.download-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                if (this.classList.contains('disabled')) return;
-                
-                const apkId = this.getAttribute('data-id');
-                currentApk = apkData.find(apk => apk.id == apkId);
-                
-                modal.style.display = 'flex';
-                
-                let timeLeft = 10;
-                timerElement.textContent = timeLeft;
-                progressElement.style.width = '0%';
-                modalDownloadBtn.classList.add('disabled');
-                modalDownloadBtn.href = "#";
-                modalDownloadBtn.textContent = 'Download Now';
-                
-                countdown = setInterval(() => {
-                    timeLeft--;
-                    timerElement.textContent = timeLeft;
-                    progressElement.style.width = `${(10 - timeLeft) * 10}%`;
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(countdown);
-                        modalDownloadBtn.classList.remove('disabled');
-                        modalDownloadBtn.classList.add('active-download-btn');
-                        modalDownloadBtn.textContent = 'Download Now';
-                        // Use the direct download link format for Google Drive
-                        modalDownloadBtn.href = currentApk.downloadLink;
-                        modalDownloadBtn.setAttribute('download', `${currentApk.name}.apk`);
-                    }
-                }, 1000);
-            });
-        });
-
         // Close modal when clicking the X button
         closeModalBtn.addEventListener('click', closeModal);
+        closeViewModalBtn.addEventListener('click', () => {
+            viewModal.style.display = 'none';
+        });
 
         // Close modal when clicking outside
         window.addEventListener('click', function(event) {
             if (event.target === modal) {
                 closeModal();
+            }
+            if (event.target === viewModal) {
+                viewModal.style.display = 'none';
             }
         });
     </script>
